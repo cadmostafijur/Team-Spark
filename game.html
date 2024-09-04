@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSolar Chronicles - The Star Life Cycle Game</title>
+    <style>
+        /* CSS Styles */
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            background: url('https://cdn.pixabay.com/photo/2011/12/14/12/23/solar-system-11111_960_720.jpg') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: rgba(255, 204, 0, 0.8); /* Semi-transparent background */
+            color: #333;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 5px solid #ff9900;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2em;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+
+        nav ul li {
+            margin-left: 20px;
+        }
+
+        nav ul li a {
+            color: #333;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        nav ul li a:hover {
+            color: #ff6600;
+        }
+
+        .main-content {
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 10px;
+            flex: 1; /* Takes up remaining space */
+        }
+
+        .main-content h2 {
+            color: white;
+            font-size: 2em;
+            /* color: #ff6600; */
+        }
+
+        .question-container {
+            margin: 20px 0;
+        }
+
+        .question-container p {
+            font-size: 1.2em;
+        }
+
+        .question-container button {
+            background-color: #ff6600;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px;
+            font-size: 1em;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .question-container button:hover {
+            background-color: #ff3300;
+        }
+
+        .feedback {
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+
+        footer {
+            background: rgba(255, 204, 0, 0.8); /* Semi-transparent background */
+            color: #333;
+            text-align: center;
+            padding: 15px;
+            border-top: 5px solid #ff9900;
+            margin-top: auto; /* Pushes the footer to the bottom */
+        }
+
+        .score-board {
+            margin-bottom: 20px;
+            font-size: 1.2em;
+            /* color: #ff6600; */
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>SSolar Chronicles - Game</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="Gallery.html">Gallery</a></li>
+                <li><a href="StoryOverview.html">Story Overview</a></li>
+                <!-- <li><a href="Game.php">Game</a></li> -->
+                <!-- <li><a href="x.php">x</a></li> -->
+            </ul>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <h2>Star Life Cycle Quiz</h2>
+        <div class="score-board" id="score-board">Score: 0</div>
+        <div id="game">
+            <!-- Game content will be injected here by JavaScript -->
+        </div>
+    </main>
+
+    <script>
+        // JavaScript for Game Logic
+
+        const chapters = [
+            {
+                title: "Formation - The Spark of Life",
+                question: "What marks the formation of a star?",
+                options: ["A supernova", "Nuclear fusion", "A nebula", "A black hole"],
+                correctAnswer: "A nebula",
+                feedback: "The formation of a star begins in a nebula, a cloud of gas and dust. The nebula collapses under gravity to form a star."
+            },
+            {
+                title: "Main Sequence - The Radiant Youth",
+                question: "What is the main energy source of a star in the main sequence?",
+                options: ["Gravitational collapse", "Nuclear fusion", "Chemical reactions", "Magnetic fields"],
+                correctAnswer: "Nuclear fusion",
+                feedback: "During the main sequence phase, a star generates energy through nuclear fusion, converting hydrogen into helium in its core."
+            },
+            {
+                title: "Red Giant - The Aging Titan",
+                question: "What happens to a star when it becomes a red giant?",
+                options: ["It shrinks", "It cools down", "It expands", "It disappears"],
+                correctAnswer: "It expands",
+                feedback: "As a star ages, it expands into a red giant. The core contracts while the outer layers expand and cool."
+            },
+            {
+                title: "Supernova - The Brilliant Finale",
+                question: "What is a supernova?",
+                options: ["A giant gas cloud", "A dying star's explosion", "A new star formation", "A type of nebula"],
+                correctAnswer: "A dying star's explosion",
+                feedback: "A supernova is the explosive death of a star. It occurs when a massive star's core collapses, causing a massive explosion."
+            },
+            {
+                title: "Stellar Remnants - Seeds of the Future",
+                question: "What can form from the remnants of a supernova?",
+                options: ["A black hole", "A new star", "A white dwarf", "All of the above"],
+                correctAnswer: "All of the above",
+                feedback: "The remnants of a supernova can form different objects depending on the star's mass: a black hole, a neutron star, or a white dwarf."
+            }
+        ];
+
+        let currentChapter = 0;
+        let score = 0;
+
+        function loadChapter(chapterIndex) {
+            const chapter = chapters[chapterIndex];
+            const gameDiv = document.getElementById('game');
+
+            if (chapter) {
+                gameDiv.innerHTML = `
+                    <h3>${chapter.title}</h3>
+                    <div class="question-container">
+                        <p>${chapter.question}</p>
+                        ${chapter.options.map(option => `<button onclick="checkAnswer('${option}')">${option}</button>`).join('')}
+                    </div>
+                    <div class="feedback" id="feedback"></div>
+                `;
+            } else {
+                gameDiv.innerHTML = '<h3>Congratulations! You have completed the quiz.</h3>';
+            }
+        }
+
+        function checkAnswer(selectedAnswer) {
+            const chapter = chapters[currentChapter];
+            const feedbackDiv = document.getElementById('feedback');
+
+            if (selectedAnswer === chapter.correctAnswer) {
+                score += 10; // Award 10 points for a correct answer
+                feedbackDiv.innerHTML = `<p style="color: green;">Correct! ${chapter.feedback}</p>`;
+            } else {
+                feedbackDiv.innerHTML = `<p style="color: red;">Incorrect. ${chapter.feedback}</p>`;
+            }
+
+            document.getElementById('score-board').innerText = `Score: ${score}`;
+
+            currentChapter++;
+            if (currentChapter < chapters.length) {
+                setTimeout(() => loadChapter(currentChapter), 2000); // Move to the next chapter after 2 seconds
+            } else {
+                setTimeout(() => {
+                    document.getElementById('game').innerHTML = `<h3>Congratulations! You have completed the quiz with a final score of ${score}.</h3>`;
+                }, 2000);
+            }
+        }
+
+        // Initialize the game
+        loadChapter(currentChapter);
+    </script>
+
+    <footer>
+        <p>&copy; 2024 Solar Chronicles By Team Spark.</p>
+    </footer>
+</body>
+</html>
