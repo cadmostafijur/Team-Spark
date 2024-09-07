@@ -116,6 +116,30 @@
             /* color: #ff6600; */
             color: white;
         }
+        .feedback {
+    display: none; /* Hide feedback box initially */
+    margin-top: 20px;
+    font-size: 1.2em;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f8f8f8; /* Light background color for the feedback box */
+    border: 1px solid #ddd; /* Light border around the feedback box */
+    color: #333; /* Default text color */
+    max-width: 400px; /* Limit the width of the feedback box */
+    margin: 20px auto; /* Center the feedback box */
+}
+.feedback.correct {
+    background-color: #d4edda; /* Light green for correct answers */
+    border-color: #c3e6cb; /* Darker green border */
+    color: #155724; /* Dark green text */
+}
+.feedback.incorrect {
+    background-color: #f8d7da; /* Light red for incorrect answers */
+    border-color: #f5c6cb; /* Darker red border */
+    color: #721c24; /* Dark red text */
+}
+
+
     </style>
 </head>
 <body>
@@ -148,9 +172,7 @@
 
     <script>
         // JavaScript for Game Logic
-// JavaScript for Game Logic
-
-const chapters = [
+        const originalChapters = [
     {
         title: "Formation - The Spark of Life",
         question: "What marks the formation of a star?",
@@ -173,11 +195,11 @@ const chapters = [
         feedback: "As a star ages, it expands into a red giant. The core contracts while the outer layers expand and cool."
     },
     {
-        title: "Supernova - The Brilliant Finale",
-        question: "What is a supernova?",
-        options: ["A giant gas cloud", "A dying star's explosion", "A new star formation", "A type of nebula"],
-        correctAnswer: "A dying star's explosion",
-        feedback: "A supernova is the explosive death of a star. It occurs when a massive star's core collapses, causing a massive explosion."
+        title: "Black Holes - The Cosmic Enigma",
+        question: "What defines a black hole?",
+        options: ["An extremely dense object with a strong gravitational pull", "A region of space with no matter", "A rapidly rotating star", "A cold cloud of gas"],
+        correctAnswer: "An extremely dense object with a strong gravitational pull",
+        feedback: "A black hole is an extremely dense object with a gravitational pull so strong that not even light can escape from it."
     },
     {
         title: "Stellar Remnants - Seeds of the Future",
@@ -187,6 +209,18 @@ const chapters = [
         feedback: "The remnants of a supernova can form different objects depending on the star's mass: a black hole, a neutron star, or a white dwarf."
     }
 ];
+
+// Function to shuffle an array
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
+// Shuffle the chapters to create a new question set for each participant
+const chapters = [...originalChapters]; // Copy the original array
+shuffleArray(chapters);
 
 let currentChapter = 0;
 let score = 0;
@@ -208,17 +242,20 @@ function loadChapter(chapterIndex) {
         gameDiv.innerHTML = '<h3>Congratulations! You have completed the quiz.</h3>';
     }
 }
-
 function checkAnswer(selectedAnswer) {
     const chapter = chapters[currentChapter];
     const feedbackDiv = document.getElementById('feedback');
 
     if (selectedAnswer === chapter.correctAnswer) {
         score += 10; // Award 10 points for a correct answer
-        feedbackDiv.innerHTML = `<p style="color: green;">Correct! ${chapter.feedback}</p>`;
+        feedbackDiv.innerHTML = `<p>Correct! ${chapter.feedback}</p>`;
+        feedbackDiv.className = 'feedback correct'; // Apply the correct feedback styling
     } else {
-        feedbackDiv.innerHTML = `<p style="color: red;">Incorrect. ${chapter.feedback}</p>`;
+        feedbackDiv.innerHTML = `<p>Incorrect. ${chapter.feedback}</p>`;
+        feedbackDiv.className = 'feedback incorrect'; // Apply the incorrect feedback styling
     }
+
+    feedbackDiv.style.display = 'block'; // Show the feedback box
 
     document.getElementById('score-board').innerText = `Score: ${score}`;
 
@@ -231,6 +268,7 @@ function checkAnswer(selectedAnswer) {
         }, 2000);
     }
 }
+
 
 // Initialize the game
 loadChapter(currentChapter);
