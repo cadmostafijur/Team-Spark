@@ -148,91 +148,93 @@
 
     <script>
         // JavaScript for Game Logic
+// JavaScript for Game Logic
 
-        const chapters = [
-            {
-                title: "Formation - The Spark of Life",
-                question: "What marks the formation of a star?",
-                options: ["A supernova", "Nuclear fusion", "A nebula", "A black hole"],
-                correctAnswer: "A nebula",
-                feedback: "The formation of a star begins in a nebula, a cloud of gas and dust. The nebula collapses under gravity to form a star."
-            },
-            {
-                title: "Main Sequence - The Radiant Youth",
-                question: "What is the main energy source of a star in the main sequence?",
-                options: ["Gravitational collapse", "Nuclear fusion", "Chemical reactions", "Magnetic fields"],
-                correctAnswer: "Nuclear fusion",
-                feedback: "During the main sequence phase, a star generates energy through nuclear fusion, converting hydrogen into helium in its core."
-            },
-            {
-                title: "Red Giant - The Aging Titan",
-                question: "What happens to a star when it becomes a red giant?",
-                options: ["It shrinks", "It cools down", "It expands", "It disappears"],
-                correctAnswer: "It expands",
-                feedback: "As a star ages, it expands into a red giant. The core contracts while the outer layers expand and cool."
-            },
-            {
-                title: "Supernova - The Brilliant Finale",
-                question: "What is a supernova?",
-                options: ["A giant gas cloud", "A dying star's explosion", "A new star formation", "A type of nebula"],
-                correctAnswer: "A dying star's explosion",
-                feedback: "A supernova is the explosive death of a star. It occurs when a massive star's core collapses, causing a massive explosion."
-            },
-            {
-                title: "Stellar Remnants - Seeds of the Future",
-                question: "What can form from the remnants of a supernova?",
-                options: ["A black hole", "A new star", "A white dwarf", "All of the above"],
-                correctAnswer: "All of the above",
-                feedback: "The remnants of a supernova can form different objects depending on the star's mass: a black hole, a neutron star, or a white dwarf."
-            }
-        ];
+const chapters = [
+    {
+        title: "Formation - The Spark of Life",
+        question: "What marks the formation of a star?",
+        options: ["A supernova", "Nuclear fusion", "A nebula", "A black hole"],
+        correctAnswer: "A nebula",
+        feedback: "The formation of a star begins in a nebula, a cloud of gas and dust. The nebula collapses under gravity to form a star."
+    },
+    {
+        title: "Main Sequence - The Radiant Youth",
+        question: "What is the main energy source of a star in the main sequence?",
+        options: ["Gravitational collapse", "Nuclear fusion", "Chemical reactions", "Magnetic fields"],
+        correctAnswer: "Nuclear fusion",
+        feedback: "During the main sequence phase, a star generates energy through nuclear fusion, converting hydrogen into helium in its core."
+    },
+    {
+        title: "Red Giant - The Aging Titan",
+        question: "What happens to a star when it becomes a red giant?",
+        options: ["It shrinks", "It cools down", "It expands", "It disappears"],
+        correctAnswer: "It expands",
+        feedback: "As a star ages, it expands into a red giant. The core contracts while the outer layers expand and cool."
+    },
+    {
+        title: "Supernova - The Brilliant Finale",
+        question: "What is a supernova?",
+        options: ["A giant gas cloud", "A dying star's explosion", "A new star formation", "A type of nebula"],
+        correctAnswer: "A dying star's explosion",
+        feedback: "A supernova is the explosive death of a star. It occurs when a massive star's core collapses, causing a massive explosion."
+    },
+    {
+        title: "Stellar Remnants - Seeds of the Future",
+        question: "What can form from the remnants of a supernova?",
+        options: ["A black hole", "A new star", "A white dwarf", "All of the above"],
+        correctAnswer: "All of the above",
+        feedback: "The remnants of a supernova can form different objects depending on the star's mass: a black hole, a neutron star, or a white dwarf."
+    }
+];
 
-        let currentChapter = 0;
-        let score = 0;
+let currentChapter = 0;
+let score = 0;
 
-        function loadChapter(chapterIndex) {
-            const chapter = chapters[chapterIndex];
-            const gameDiv = document.getElementById('game');
+function loadChapter(chapterIndex) {
+    const chapter = chapters[chapterIndex];
+    const gameDiv = document.getElementById('game');
 
-            if (chapter) {
-                gameDiv.innerHTML = `
-                    <h3>${chapter.title}</h3>
-                    <div class="question-container">
-                        <p>${chapter.question}</p>
-                        ${chapter.options.map(option => `<button onclick="checkAnswer('${option}')">${option}</button>`).join('')}
-                    </div>
-                    <div class="feedback" id="feedback"></div>
-                `;
-            } else {
-                gameDiv.innerHTML = '<h3>Congratulations! You have completed the quiz.</h3>';
-            }
-        }
+    if (chapter) {
+        gameDiv.innerHTML = `
+            <h3>${chapter.title}</h3>
+            <div class="question-container">
+                <p>${chapter.question}</p>
+                ${chapter.options.map(option => `<button onclick="checkAnswer('${option}')">${option}</button>`).join('')}
+            </div>
+            <div class="feedback" id="feedback"></div>
+        `;
+    } else {
+        gameDiv.innerHTML = '<h3>Congratulations! You have completed the quiz.</h3>';
+    }
+}
 
-        function checkAnswer(selectedAnswer) {
-            const chapter = chapters[currentChapter];
-            const feedbackDiv = document.getElementById('feedback');
+function checkAnswer(selectedAnswer) {
+    const chapter = chapters[currentChapter];
+    const feedbackDiv = document.getElementById('feedback');
 
-            if (selectedAnswer === chapter.correctAnswer) {
-                score += 10; // Award 10 points for a correct answer
-                feedbackDiv.innerHTML = `<p style="color: green;">Correct! ${chapter.feedback}</p>`;
-            } else {
-                feedbackDiv.innerHTML = `<p style="color: red;">Incorrect. ${chapter.feedback}</p>`;
-            }
+    if (selectedAnswer === chapter.correctAnswer) {
+        score += 10; // Award 10 points for a correct answer
+        feedbackDiv.innerHTML = `<p style="color: green;">Correct! ${chapter.feedback}</p>`;
+    } else {
+        feedbackDiv.innerHTML = `<p style="color: red;">Incorrect. ${chapter.feedback}</p>`;
+    }
 
-            document.getElementById('score-board').innerText = `Score: ${score}`;
+    document.getElementById('score-board').innerText = `Score: ${score}`;
 
-            currentChapter++;
-            if (currentChapter < chapters.length) {
-                setTimeout(() => loadChapter(currentChapter), 2000); // Move to the next chapter after 2 seconds
-            } else {
-                setTimeout(() => {
-                    document.getElementById('game').innerHTML = `<h3>Congratulations! You have completed the quiz with a final score of ${score}.</h3>`;
-                }, 2000);
-            }
-        }
+    currentChapter++;
+    if (currentChapter < chapters.length) {
+        setTimeout(() => loadChapter(currentChapter), 2000); // Move to the next chapter after 2 seconds
+    } else {
+        setTimeout(() => {
+            document.getElementById('game').innerHTML = `<h3>Congratulations! You have completed the quiz with a final score of ${score}.</h3>`;
+        }, 2000);
+    }
+}
 
-        // Initialize the game
-        loadChapter(currentChapter);
+// Initialize the game
+loadChapter(currentChapter);
+
     </script>
 
 <footer>
